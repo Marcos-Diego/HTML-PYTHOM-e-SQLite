@@ -1,0 +1,83 @@
+.btw {
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 10px;
+    width: 9rem;
+    height: 2.75rem;
+    transition: transform 0.5s;
+    cursor: pointer;
+}
+
+.close {
+    width: 2.5rem;
+    height: 2.5rem;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    transition: transform 0.5s;
+    cursor: pointer;
+}
+
+.close:hover {
+    transform: scale(1.1);
+}
+
+.btw:hover {
+    transform: scale(1.1);
+}
+
+th, td {
+    border: 1.5px solid oklch(70.7% 0.022 261.325);
+    height: 2.25rem;
+    padding: 0.5rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.menu {
+    border-radius: 0;
+    cursor: pointer;
+    row-gap: 1rem;
+}
+
+#opcoes_de_achados {
+    display: none;
+}
+
+#filtro_escuro {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.popup_filtro {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#mini_menu button {
+    display: block;
+    width: 100%;
+    padding: 8px;
+
+    text-align: left;
+    border-radius: 5px;
+}
+
+#mini_menu button:hover {
+    background-color: #e5e5e5;
+}
+
+#filtro td {
+    gap: 5px;
+    border: 2px solid black;
+    border-radius: 10px;
+}

@@ -1,0 +1,17 @@
+-- database: ./banco_de_dados.db
+
+CREATE TABLE IF NOT EXISTS Itens(
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Nome TEXT NOT NULL,
+    Descrição TEXT NOT NULL,
+    Data DATE DEFAULT CURRENT_DATE,
+    Local TEXT NOT NULL,
+    Situação TEXT NOT NULL
+);
+
+
+--ALTER TABLE Itens DROP COLUMN `Situação`;
+
+--ALTER TABLE Itens ADD COLUMN;
+
+

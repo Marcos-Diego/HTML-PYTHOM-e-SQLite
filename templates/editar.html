@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/css/cadastro.css">
+    <title>editar</title>
+</head>
+<body>
+    <section class=" pt-[2.25rem] bg-[#ffffff] pb-[5rem]">
+            <form action="{{ url_for('btw_atualizar') }}" method="POST">
+                <table class="table-fixed table-auto">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label for="id">ID</label>
+                            </th>
+                            <th>
+                                <label for="nome">Nome</label>
+                            </th>
+                            <th>
+                                <label for="descricao">Descrição</label>
+                            </th>
+                            <th>
+                                <label for="data">Data</label>
+                            </th>
+                            <th>
+                                <label for="local">Local</label>
+                            </th>
+                            <th>
+                                <label for="situacao">Situação</label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td>
+                                <input type="text" id="id_item" name="id_item">
+                            </td>
+                            <td>
+                                <input type="text" id="nome" name="nome">
+                            </td>
+                            <td>
+                                <input type="text" id="descricao" name="descricao">
+                            </td>
+                            <td>
+                                <input type="text" id="data" name="data">
+                            </td>
+                            <td>
+                                <input type="text" id="local" name="local">
+                            </td>
+                            <td >
+                                <select id="situacao" name="situacao">
+                                    <option class="hidden" value=""></option>
+                                    <option value="Devolvido">Devolvido</option>
+                                    <option value="Perdido">Perdido</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit">atulizar</button>
+            </form>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro de Achados e Perdidos</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="/static/css/index.css">
+
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+</head>
+
+<body class="flex font-serif">
+    <!--=======================MENU=======================-->
+    <aside class="bg-[#FD6E23] w-[20rem] grid grid-rows-[auto 1fr]">
+        <nav class="flex flex-col text-lg">
+            <button id="menu_achados" class="cursor-pointer menu text-2xl" type="button">Achados e Perdidos</button>
+            <div id="opcoes_de_achados" class="flex bg-[#F05300]">
+                <button class="menu" type="button" onclick="window.location.href = '/senac/achados_e_perdidos'">Lista</button>
+                <button class="menu" type="button" onclick="window.location.href = '/senac/cadastro'">Cadastro</button>
+                <button class="menu" type="button" onclick="window.location.href = '/senac/editar'">Editar</button>
+            </div>
+        </nav>
+    </aside>
+
+<!--=======================BOTOES=======================-->
+    <!--Mini_menu-->
+    <section id="mini_menu" class="hidden fixed z-[1000] bg-white border border-solid border-black rounded-lg w-[9.3rem] p-[0.3rem]">
+        <button id="btw_editar" type="button">Editar item</button>
+        <button id="btw_excluir" type="button">Excluir item</button>
+    </section>
+<!---->
+    <main class="px-[4.9rem] my-[4rem]">
+        <h1 class="text-[4rem] mb-[8.25rem]">Achados e Perdidos</h1>
+        <section class="justify-start">
+            <button class="mr-[0.5rem] mb-[1.12rem] btw" id="btw_filtro" type="button">Filtro</button>
+            <button class="mb-[1.12rem] btw" id="btw_cadastrar" type="button">Cadastrar</button>
+        </section>
+
+        <!--=======================TABELA=======================-->
+        <article class="border h-[33rem] w-full overflow-y-auto">
+            <table class="table-fixed table-auto border-collapse"> <!--border-separat-->
+                <thead class="bg-olive-300">
+                    <tr>
+                        <th class="w-[4rem]">ID</th>
+                        <th class="w-[10rem]">Nome</th>
+                        <th class="w-[36rem]">Descrição</th>
+                        <th class="w-[8rem]">Data</th>
+                        <th class="w-[8rem]">Local</th>
+                        <th class="w-[8rem]">Situação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in itens %}
+                    <tr data-id="{{ item['ID'] }}" class="id_linha">
+                        <td>{{ item["ID"] }}</td>
+                        <td>{{ item["Nome"] }}</td>
+                        <td>{{ item["Descrição"] }}</td>
+                        <td>{{ item["Data"] }}</td>
+                        <td>{{ item["Local"] }}</td>
+                        <td>{{ item["Situação"] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </article>
+    </main>
+    <!--=======================FILTRO=======================-->
+    <div id="filtro_escuro">
+        <section id="filtro" class="pt-[2.25rem] bg-[#ffffff] pb-[5rem] popup_filtro">
+            <h2 class="text-[4rem] mb-[4.25rem]">Filtro</h2>
+            <svg class="close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(229, 18, 18)" d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z"/></svg>
+            <form class="pt-[2rem]" action="{{ url_for('btw_filtrar') }}" method="POST">
+                <table class="table-fixed table-auto">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" id="id_item" name="id_item" placeholder="ID">
+                            </td>
+                            <td>
+                                <input type="text" id="nome" name="nome" placeholder="Nome">
+                            </td>
+                            <td>
+                                <input type="text" id="descricao" name="descricao" placeholder="Descrição">
+                            </td>
+                            <td>
+                                <input type="text" id="data" name="data" placeholder="Data">
+                            </td>
+                            <td>
+                                <input type="text" id="local" name="local" placeholder="Local">
+                            </td>
+                            <td>
+                                <select class="cursor-pointer" id="situacao" name="situacao" >
+                                    <option disabled selected hidden value="">Situação</option>
+                                    <option value="Devolvido">Devolvido</option>
+                                    <option value="Perdido">Perdido</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btw mt-[2rem]" type="submit">Buscar</button>
+            </form>
+        </section>
+        <!--=======================Update=======================-->
+        <section id="update" class=" pt-[4.25rem] bg-[#ffffff] pb-[5rem] popup_filtro">
+            <svg class="close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(229, 18, 18)" d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z"/></svg>
+            <h1 class="text-[4rem] mb-[8.25rem]">Atulizar</h1>
+            <form action="{{ url_for('btw_cadastrar') }}" method="POST">
+                <table class="table-fixed table-auto">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" id="nome" name="nome" placeholder="Nome">
+                            </td>
+                            <td>
+                                <input type="text" id="descricao" name="descricao" placeholder="Descrição">
+                            </td>
+                            <td>
+                                <input type="text" id="data" name="data" placeholder="Data">
+                            </td>
+                            <td>
+                                <input type="text" id="local" name="local" placeholder="Local">
+                            </td>
+                            <td >
+                                <select class="cursor-pointe" id="situacao" name="situacao">
+                                    <option value="Devolvido">Devolvido</option>
+                                    <option selected value="Perdido">Perdido</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btw mt-[2rem]" type="submit">Atulizar</button>
+            </form>
+        </section>
+    <!--=======================Cadastrar=======================-->
+        <section id="cadastrar" class="pt-[2.25rem] bg-[#ffffff] pb-[5rem] popup_filtro">
+            <h2 class="text-[4rem] mb-[4.25rem]">Cadastrar</h2>
+            <svg class="close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path fill="rgb(229, 18, 18)" d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z"/></svg>
+            <form class="pt-[2rem]" action="{{ url_for('btw_cadastrar') }}" method="POST">
+                <table class="table-fixed table-auto">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" id="nome" name="nome" placeholder="Nome" required>
+                            </td>
+                            <td>
+                                <input type="text" id="descricao" name="descricao" placeholder="Descrição" required>
+                            </td>
+                            <td>
+                                <input type="text" id="data" name="data" placeholder="Data">
+                            </td>
+                            <td>
+                                <input type="text" id="local" name="local" placeholder="Local" required>
+                            </td>
+                            <td>
+                                <select class="cursor-pointer" id="situacao" name="situacao" required>
+                                    <option disabled selected hidden value="">Situação</option>
+                                    <option value="Devolvido">Devolvido</option>
+                                    <option value="Perdido">Perdido</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btw mt-[2rem]" type="submit">Cadastrar</button>
+            </form>
+        </section>
+    </div>
+    <script src="/static/JavaScript/index.js"></script>
+</body>
+
+</html>
