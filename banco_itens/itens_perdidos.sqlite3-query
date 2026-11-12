@@ -1,17 +1,125 @@
 -- database: ./banco_de_dados.db
 
-CREATE TABLE IF NOT EXISTS Itens(
-    ID INTEGER PRIMARY KEY AUTOINCREMENT,
-    Nome TEXT NOT NULL,
-    Descrição TEXT NOT NULL,
-    Data DATE DEFAULT CURRENT_DATE,
-    Local TEXT NOT NULL,
-    Situação TEXT NOT NULL
+PRAGMA foreign_keys = ON;
+--===============   itens   =================
+CREATE TABLE IF NOT EXISTS itens(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    categoria INTEGER NOT NULL,
+    descricao TEXT,
+    local TEXT NOT NULL,
+    data TEXT DEFAULT CURRENT_DATE,
+    consevacao TEXT NOT NULL,
+    situacao TEXT NOT NULL,
+    FOREIGN KEY (categoria) REFERENCES categoria_item (id)
 );
 
+CREATE TABLE IF NOT EXISTS categoria_item(
+    id INTEGER NOT NULL PRIMARY KEY,
+    nome TEXT NOT NULL
+);
 
+CREATE TABLE IF NOT EXISTS solicitacao(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id_item INTEGER NOT NULL,
+    usuario TEXT NOT NULL, --o py vai buscar que esta logado
+    descricao TEXT
+);
+CREATE TABLE IF NOT EXISTS registro(
+    id INTEGER PRIMARY KEy,
+    nome TEXT NOT NULL,
+    categoria INTEGER NOT NULL,
+    descricao TEXT,
+    local TEXT NOT NULL,
+    data TEXT DEFAULT CURRENT_DATE,
+    consevacao TEXT NOT NULL,
+    situacao TEXT NOT NULL,
+    modificacao_data TEXT NOT NULL,
+    modificado_por TEXT NOT NULL, --vai buscar que esta logado
+    retirado_por TEXT NOT NULL,
+    FOREIGN KEY(categoria) REFERENCES categoria_item(id)
+);
+
+--===============   Cadastro   =================
+CREATE TABLE IF NOT EXISTS cargo(
+    id INTEGER NOT NULL PRIMARY KEY,
+    nome TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS pessoa(
+    cpf TEXT NOT NULL PRIMARY KEY,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL,
+    senha TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS funcionario(
+    cpf TEXT NOT NULL PRIMARY KEY,
+    cargo TEXT NOT NULL,
+    FOREIGN KEY(cargo) REFERENCES cargo (id)
+);
+
+CREATE TABLE IF NOT EXISTS aluno(
+    cpf TEXT NOT NULL PRIMARY KEY,
+    matricula TEXT NOT NULL
+);
+
+--===============   Valores   =================
+INSERT INTO categoria_item(nome)
+VALUES
+('Eletronicos'),
+('Garrafas/Copos'),
+('Matarial escolar'),
+('Roupas'),
+('Acessorios'),
+('Outros');
+
+INSERT INTO cargo(nome)
+VALUES
+('Pedagogo'),
+('Professor'),
+('Recepcionista');
+
+INSERT INTO itens(nome, categoria, descricao, local,
+consevacao, situacao)
+VALUES
+('Garrafa preta', 2, 'Esta escrito João na lateral', 'Biblioteca', 'boa', 'Perdida');
+
+INSERT INTO pessoa(cpf, nome, email, senha)
+VALUES
+('111.222.333-44', 'Mateus', 'teteu@gmail.com', 'lira123'),
+('555.666.777-88', 'Marcos', 'Md@gmail.com', 'mm12');
+
+INSERT INTO funcionario(cpf, cargo)
+VALUES
+('111.222.333-44', 2);
+
+INSERT INTO aluno(cpf, matricula)
+VALUES
+('555.666.777-88', 'a9596519');
+
+INSERT INTO solicitacao(id_item, usuario, descricao)
+VALUES
+(1, 'Marcos', 'Isso é meu');
+
+INSERT INTO registro
+SELECT *, "2026-11-12", "Marcos"
+FROM itens
+WHERE itens.id = 1;
+
+--===============   Filtros   =================
+SELECT pessoa.*, cargo.nome AS cargo FROM pessoa
+INNER JOIN funcionario
+ON pessoa.cpf = funcionario.cpf
+INNER JOIN cargo
+ON funcionario.cargo = cargo.id;
+
+--===============   Comandos   =================
+--ALTER TABLE solicitacao RENAME COLUMN cpf TO usuario;
+--DROP TABLE funcionario;
 --ALTER TABLE Itens DROP COLUMN `Situação`;
 
---ALTER TABLE Itens ADD COLUMN;
+
+
 
 
